@@ -12,7 +12,6 @@ export const ApplicationStatus = {
 export type ApplicationStatus =
   (typeof ApplicationStatus)[keyof typeof ApplicationStatus];
 
-
 /* =========================
    Core Domain Entity
    ========================= */
@@ -24,15 +23,14 @@ export interface JobApplication {
   techTags: string[];
   source: ApplicationSource;
   status: ApplicationStatus;
-  appliedDate: string;       // When the application was submitted
-  lastUpdated: string;       // Last status change timestamp
+  appliedDate: string; // When the application was submitted
+  lastUpdated: string; // Last status change timestamp
 
   firstCallbackDate?: string; // When status first became CALLBACK
   firstInterviewDate?: string; // When status first became INTERVIEW
-  offerDate?: string;          // When status first became OFFER
+  offerDate?: string; // When status first became OFFER
   rejectionDate?: string;
 }
-
 
 export type ApplicationSource =
   | 'LinkedIn'
@@ -77,7 +75,7 @@ export const VALID_STATUS_TRANSITIONS: Readonly<
  */
 export function canTransitionStatus(
   from: ApplicationStatus,
-  to: ApplicationStatus
+  to: ApplicationStatus,
 ): boolean {
   return VALID_STATUS_TRANSITIONS[from].includes(to);
 }
@@ -101,8 +99,7 @@ export const GhostingPhase = {
   POST_INTERVIEW: 'POST_INTERVIEW',
 } as const;
 
-export type GhostingPhase =
-  (typeof GhostingPhase)[keyof typeof GhostingPhase];
+export type GhostingPhase = (typeof GhostingPhase)[keyof typeof GhostingPhase];
 
 /**
  * Determines whether an application should be considered ghosted.
@@ -112,15 +109,12 @@ const DAY_MS = 1000 * 60 * 60 * 24;
 
 export function getGhostingPhase(
   app: JobApplication,
-  now: Date = new Date()
+  now: Date = new Date(),
 ): GhostingPhase | null {
   const nowMs = now.getTime();
 
   // --- Pre-response ghosting ---
-  if (
-    app.status === ApplicationStatus.APPLIED &&
-    !app.firstCallbackDate
-  ) {
+  if (app.status === ApplicationStatus.APPLIED && !app.firstCallbackDate) {
     const applied = new Date(app.appliedDate).getTime();
     if (Number.isNaN(applied)) {
       throw new Error('Invalid appliedDate');
@@ -177,7 +171,7 @@ export function getGhostingPhase(
  */
 export function isPreResponseGhosted(
   app: JobApplication,
-  now: Date = new Date()
+  now: Date = new Date(),
 ): boolean {
   return getGhostingPhase(app, now) === GhostingPhase.PRE_RESPONSE;
 }
@@ -186,6 +180,8 @@ export function isPreResponseGhosted(
    Domain-Level Helpers
    ========================= */
 
+// All application status changes must go through transitionStatus.
+// Direct status mutation is forbidden outside test setup.
 /**
  * Applies a status transition safely.
  * Throws if the transition is invalid.
@@ -193,11 +189,11 @@ export function isPreResponseGhosted(
 export function transitionStatus(
   application: JobApplication,
   nextStatus: ApplicationStatus,
-  now: Date = new Date()
+  now: Date = new Date(),
 ): JobApplication {
   if (!canTransitionStatus(application.status, nextStatus)) {
     throw new Error(
-      `Invalid status transition: ${application.status} → ${nextStatus}`
+      `Invalid status transition: ${application.status} → ${nextStatus}`,
     );
   }
 
@@ -210,10 +206,12 @@ export function transitionStatus(
   // Record milestone timestamps (only first occurrence)
   switch (nextStatus) {
     case ApplicationStatus.CALLBACK:
-      if (!updated.firstCallbackDate) updated.firstCallbackDate = now.toISOString();
+      if (!updated.firstCallbackDate)
+        updated.firstCallbackDate = now.toISOString();
       break;
     case ApplicationStatus.INTERVIEW:
-      if (!updated.firstInterviewDate) updated.firstInterviewDate = now.toISOString();
+      if (!updated.firstInterviewDate)
+        updated.firstInterviewDate = now.toISOString();
       break;
     case ApplicationStatus.OFFER:
       if (!updated.offerDate) updated.offerDate = now.toISOString();
@@ -222,4 +220,3 @@ export function transitionStatus(
 
   return updated;
 }
-

@@ -1,7 +1,7 @@
 import {
   ApplicationStatus,
   getGhostingPhase,
-  type JobApplication
+  type JobApplication,
 } from '../domain/application.js';
 
 import { deriveMetrics } from '../domain/metrics.js';
@@ -9,9 +9,7 @@ import { deriveMetrics } from '../domain/metrics.js';
 const NOW = new Date('2025-12-21T00:00:00Z');
 
 function daysAgo(days: number): string {
-  return new Date(
-    NOW.getTime() - days * 24 * 60 * 60 * 1000
-  ).toISOString();
+  return new Date(NOW.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
 }
 
 const applications: JobApplication[] = [
@@ -24,7 +22,7 @@ const applications: JobApplication[] = [
     source: 'LinkedIn',
     status: ApplicationStatus.APPLIED,
     appliedDate: daysAgo(30),
-    lastUpdated: daysAgo(30)
+    lastUpdated: daysAgo(30),
   },
 
   // ---------- POST-CALLBACK GHOST ----------
@@ -37,7 +35,7 @@ const applications: JobApplication[] = [
     status: ApplicationStatus.CALLBACK,
     appliedDate: daysAgo(40),
     firstCallbackDate: daysAgo(25),
-    lastUpdated: daysAgo(25)
+    lastUpdated: daysAgo(25),
   },
 
   // ---------- POST-INTERVIEW GHOST ----------
@@ -51,7 +49,7 @@ const applications: JobApplication[] = [
     appliedDate: daysAgo(50),
     firstCallbackDate: daysAgo(35),
     firstInterviewDate: daysAgo(25),
-    lastUpdated: daysAgo(25)
+    lastUpdated: daysAgo(25),
   },
 
   // ---------- ACTIVE (NOT GHOSTED) ----------
@@ -64,7 +62,7 @@ const applications: JobApplication[] = [
     status: ApplicationStatus.CALLBACK,
     appliedDate: daysAgo(5),
     firstCallbackDate: daysAgo(3),
-    lastUpdated: daysAgo(3)
+    lastUpdated: daysAgo(3),
   },
 
   // ---------- REJECTED (TERMINAL, NOT GHOSTED) ----------
@@ -77,8 +75,8 @@ const applications: JobApplication[] = [
     status: ApplicationStatus.REJECTED,
     appliedDate: daysAgo(10),
     rejectionDate: daysAgo(4),
-    lastUpdated: daysAgo(4)
-  }
+    lastUpdated: daysAgo(4),
+  },
 ];
 
 // ---------- Per-application phase verification ----------
@@ -88,7 +86,7 @@ for (const app of applications) {
   console.log({
     id: app.id,
     status: app.status,
-    ghostingPhase: getGhostingPhase(app, NOW)
+    ghostingPhase: getGhostingPhase(app, NOW),
   });
 }
 

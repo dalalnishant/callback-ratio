@@ -1,6 +1,5 @@
 import { getDB } from './db';
-import { ApplicationStatus } from '../domain/application';
-import type { JobApplication } from '../domain/application';
+import type { ApplicationStatus, JobApplication } from '../domain/application';
 
 export interface ApplicationRepository {
   getAll(): Promise<JobApplication[]>;
@@ -11,9 +10,7 @@ export interface ApplicationRepository {
   delete(id: string): Promise<void>;
 }
 
-export class IndexedDBApplicationRepository
-  implements ApplicationRepository
-{
+export class IndexedDBApplicationRepository implements ApplicationRepository {
   async getAll(): Promise<JobApplication[]> {
     const db = await getDB();
     return db.getAll('applications');
@@ -34,10 +31,7 @@ export class IndexedDBApplicationRepository
     await db.put('applications', application);
   }
 
-  async updateStatus(
-    id: string,
-    status: ApplicationStatus
-  ): Promise<void> {
+  async updateStatus(id: string, status: ApplicationStatus): Promise<void> {
     const db = await getDB();
     const existing = await db.get('applications', id);
 
