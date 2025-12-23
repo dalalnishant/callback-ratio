@@ -178,6 +178,12 @@ export function transitionStatus(
         case ApplicationStatus.OFFER:
             if (!updated.offerDate) updated.offerDate = now.toISOString();
             break;
+
+        // Skip others.
+        case ApplicationStatus.APPLIED:
+        case ApplicationStatus.REJECTED:
+        default:
+            break;
     }
 
     return updated;
