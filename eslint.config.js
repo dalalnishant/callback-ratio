@@ -31,6 +31,11 @@ export default [
             // ---------- Architecture ----------
             'import/no-cycle': 'error',
             'import/no-duplicates': 'error',
+
+
+            '@typescript-eslint/no-misused-promises': 'error',
+            '@typescript-eslint/switch-exhaustiveness-check': 'error',
+            '@typescript-eslint/no-unnecessary-condition': 'error',
         },
     },
 
