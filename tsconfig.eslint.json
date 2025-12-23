@@ -1,17 +1,17 @@
 {
-  "compilerOptions": {
-    "noEmit": true,
-    "strict": true,
+    "compilerOptions": {
+        "noEmit": true,
+        "strict": true,
 
-    "target": "ES2022",
-    "lib": ["ES2022"],
+        "target": "ES2022",
+        "lib": ["ES2022"],
 
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
 
-    "types": ["node"],
+        "types": ["node"],
 
-    "skipLibCheck": true
-  },
-  "include": ["src/**/*.ts", "vite.config.ts"]
+        "skipLibCheck": true
+    },
+    "include": ["src/**/*.ts", "vite.config.ts"]
 }
